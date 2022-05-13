@@ -44,19 +44,12 @@ fun PieChart(
         360 * it / 100
     }
 
-    val progressSize = mutableListOf<Float>()
-    progressSize.add(angleProgress.first())
-
-    for (x in 1 until angleProgress.size)
-        progressSize.add(angleProgress[x] + progressSize[x - 1])
-
     var startAngle = 270f
 
     BoxWithConstraints(modifier = modifier) {
 
         val sideSize = min(constraints.maxWidth, constraints.maxHeight)
         val padding = (sideSize * 20) / 100f
-
 
         val pathPortion = remember {
             Animatable(initialValue = 0f)
