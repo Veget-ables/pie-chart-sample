@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlin.math.cos
 import kotlin.math.min
@@ -30,6 +31,7 @@ fun PieChart(
     modifier: Modifier,
     progress: List<Float>,
     colors: List<Color>,
+    labelFontSize: Dp,
     percentColor: Color = Color.White
 ) {
     if (progress.isEmpty() || progress.size != colors.size) return
@@ -91,14 +93,13 @@ fun PieChart(
                     val centerPosX = cos(radian) * size.width / 4
                     val centerPosY = sin(radian) * size.width / 4
 
-                    val fontSize = 60.toDp().toPx()
                     drawText(
                         "${proportions[index].roundToInt()}%",
                         (sideSize / 2) + centerPosX.toFloat(),
                         (sideSize / 2) + centerPosY.toFloat(),
                         Paint().apply {
                             color = percentColor.toArgb()
-                            textSize = fontSize
+                            textSize = labelFontSize.toPx()
                             textAlign = Paint.Align.CENTER
                         }
                     )
@@ -138,6 +139,7 @@ fun ChartPreview() {
             Color(0xFFbf95d4),
             Color(0xFFf4ac1a),
             Color(0xFF8b0a50),
-        )
+        ),
+        labelFontSize = 24.dp
     )
 }

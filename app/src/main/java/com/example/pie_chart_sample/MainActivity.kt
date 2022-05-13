@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.pie_chart_sample.ui.chart.PieChart
 import com.example.pie_chart_sample.ui.theme.PiechartsampleTheme
 
@@ -32,7 +33,8 @@ class MainActivity : ComponentActivity() {
                             Color.Green,
                             Color.Yellow,
                             Color.Cyan
-                        )
+                        ),
+                        labelFontSize = 24.dp
                     )
                 }
             }
