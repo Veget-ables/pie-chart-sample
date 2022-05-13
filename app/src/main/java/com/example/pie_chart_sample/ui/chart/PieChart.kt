@@ -14,15 +14,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.roundToInt
+import kotlin.math.sin
 
 @Composable
 fun PieChart(
@@ -75,21 +76,26 @@ fun PieChart(
                 .height(sideSize.dp)
         ) {
             angleProgress.forEachIndexed { index, arcProgress ->
+                val sweepAngle = arcProgress * pathPortion.value
                 drawPie(
-                    colors[index],
-                    startAngle,
-                    arcProgress * pathPortion.value,
-                    size,
+                    color = colors[index],
+                    startAngle = startAngle,
+                    sweepAngle = sweepAngle,
+                    size = size,
                     padding = padding,
                 )
-                startAngle += arcProgress
 
                 drawContext.canvas.nativeCanvas.apply {
+                    val centerAngle = startAngle + (sweepAngle / 2)
+                    val radian = (centerAngle * Math.PI) / 180
+                    val centerPosX = cos(radian) * size.width / 4
+                    val centerPosY = sin(radian) * size.width / 4
+
                     val fontSize = 60.toDp().toPx()
                     drawText(
                         "${proportions[index].roundToInt()}%",
-                        (sideSize / 2) + fontSize / 4 + arcProgress,
-                        (sideSize / 2) + fontSize / 3 + arcProgress,
+                        (sideSize / 2) + centerPosX.toFloat(),
+                        (sideSize / 2) + centerPosY.toFloat(),
                         Paint().apply {
                             color = percentColor.toArgb()
                             textSize = fontSize
@@ -97,6 +103,8 @@ fun PieChart(
                         }
                     )
                 }
+
+                startAngle += arcProgress
             }
         }
     }
@@ -105,22 +113,19 @@ fun PieChart(
 private fun DrawScope.drawPie(
     color: Color,
     startAngle: Float,
-    arcProgress: Float,
+    sweepAngle: Float,
     size: Size,
     padding: Float,
-): Path {
-
-    return Path().apply {
-        drawArc(
-            color = color,
-            startAngle = startAngle,
-            sweepAngle = arcProgress,
-            useCenter = true,
-            size = size,
-            style = Fill,
-            topLeft = Offset(padding / 2, padding / 2)
-        )
-    }
+) {
+    drawArc(
+        color = color,
+        startAngle = startAngle,
+        sweepAngle = sweepAngle,
+        useCenter = true,
+        size = size,
+        style = Fill,
+        topLeft = Offset(padding / 2, padding / 2)
+    )
 }
 
 @Preview
