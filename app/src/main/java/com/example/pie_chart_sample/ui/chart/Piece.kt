@@ -1,0 +1,10 @@
+package com.example.pie_chart_sample.ui.chart
+
+import androidx.compose.ui.graphics.Color
+
+data class Piece(
+    val proportion: Float,
+    val backgroundColor: Color,
+    val title: String,
+    val labelColor: Color = Color.White
+)

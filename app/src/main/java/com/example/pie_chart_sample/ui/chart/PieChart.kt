@@ -3,7 +3,6 @@ package com.example.pie_chart_sample.ui.chart
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
@@ -13,13 +12,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.Dp
 import kotlin.math.cos
 import kotlin.math.sin
-
-data class Piece(
-    val proportion: Float,
-    val backgroundColor: Color,
-    val title: String,
-    val labelColor: Color = Color.White
-)
 
 @Composable
 fun PieChart(
