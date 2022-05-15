@@ -4,6 +4,7 @@ import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.nativeCanvas
@@ -44,22 +45,23 @@ fun PieChart(
                 size = size,
                 style = Fill,
             )
-
             val canvasSize = size.width
 
+            val centerAngle = startAngle + (sweepAngle / 2)
+            val radian = (centerAngle * Math.PI) / 180
+            val proportionX = ((canvasSize / 2) + (cos(radian) * canvasSize / 4)).toFloat()
+            val proportionY = ((canvasSize / 2) + (sin(radian) * canvasSize / 4)).toFloat()
+            val labelX = ((canvasSize / 2) + (cos(radian) * canvasSize / 2.5)).toFloat()
+            val labelY = ((canvasSize / 2) + (sin(radian) * canvasSize / 2.5)).toFloat()
+
+            drawCircle(color = Color.Black, radius = 10f, center = Offset(proportionX, proportionY))
+            drawCircle(color = Color.Black, radius = 10f, center = Offset(labelX, labelY))
+
             drawContext.canvas.nativeCanvas.apply {
-                val centerAngle = startAngle + (sweepAngle / 2)
-                val radian = (centerAngle * Math.PI) / 180
-                val proportionX = cos(radian) * canvasSize / 4
-                val proportionY = sin(radian) * canvasSize / 4
-
-                val labelX = cos(radian) * canvasSize / 2.5
-                val labelY = sin(radian) * canvasSize / 2.5
-
                 drawText(
                     "${piece.proportion}%",
-                    (canvasSize / 2) + proportionX.toFloat(),
-                    (canvasSize / 2) + proportionY.toFloat(),
+                    proportionX,
+                    proportionY,
                     Paint().apply {
                         color = piece.labelColor.toArgb()
                         textSize = labelFontSize.toPx()
@@ -68,8 +70,8 @@ fun PieChart(
                 )
                 drawText(
                     piece.label,
-                    (canvasSize / 2) + labelX.toFloat(),
-                    (canvasSize / 2) + labelY.toFloat(),
+                    labelX,
+                    labelY,
                     Paint().apply {
                         color = piece.labelColor.toArgb()
                         textSize = labelFontSize.toPx()
