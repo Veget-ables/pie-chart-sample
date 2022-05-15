@@ -1,12 +1,13 @@
 package com.example.pie_chart_sample.ui.chart
 
-import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.Fill
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.Dp
@@ -57,26 +58,24 @@ fun PieChart(
             drawCircle(color = Color.Black, radius = 10f, center = Offset(proportionX, proportionY))
             drawCircle(color = Color.Black, radius = 10f, center = Offset(labelX, labelY))
 
-            drawContext.canvas.nativeCanvas.apply {
-                drawText(
+            val paint = Paint().asFrameworkPaint().apply {
+                color = piece.labelColor.toArgb()
+                textSize = labelFontSize.toPx()
+                textAlign = android.graphics.Paint.Align.CENTER
+            }
+
+            drawIntoCanvas {
+                it.nativeCanvas.drawText(
                     "${piece.proportion}%",
                     proportionX,
                     proportionY,
-                    Paint().apply {
-                        color = piece.labelColor.toArgb()
-                        textSize = labelFontSize.toPx()
-                        textAlign = Paint.Align.CENTER
-                    }
+                    paint
                 )
-                drawText(
+                it.nativeCanvas.drawText(
                     piece.label,
                     labelX,
                     labelY,
-                    Paint().apply {
-                        color = piece.labelColor.toArgb()
-                        textSize = labelFontSize.toPx()
-                        textAlign = Paint.Align.CENTER
-                    }
+                    paint
                 )
             }
 
