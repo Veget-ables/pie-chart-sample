@@ -91,13 +91,13 @@ private fun DrawScope.drawLabel(pieces: List<Piece>, endAngles: List<Float>, fon
             it.nativeCanvas.drawText(
                 "${piece.proportion}%",
                 proportionX,
-                proportionY,
+                proportionY + (fontSize.toPx() / 4),
                 paint
             )
             it.nativeCanvas.drawText(
                 piece.label,
                 labelX,
-                labelY,
+                labelY + (fontSize.toPx() / 4),
                 paint
             )
         }
