@@ -59,8 +59,8 @@ private fun DrawScope.drawPie(pieces: List<Piece>, sweepAngles: List<Float>) {
 
 private fun DrawScope.drawLabel(pieces: List<Piece>, sweepAngles: List<Float>, fontSize: Dp) {
     var startAngle = 270f
-    val canvasWidth = size.width
-    val canvasHalfWidth = canvasWidth / 2
+    val canvasHalfWidth = size.width / 2
+    val canvasHalfHeight = size.height / 2
 
     pieces.forEachIndexed { index, piece ->
         val paint = Paint().asFrameworkPaint().apply {
@@ -75,8 +75,8 @@ private fun DrawScope.drawLabel(pieces: List<Piece>, sweepAngles: List<Float>, f
             val centerAngle = startAngle + (sweepAngle / 2)
             val radian = (centerAngle * Math.PI) / 180
 
-            val labelDistXFromCenter = cos(radian) * canvasWidth / 2.5
-            val labelDistYFromCenter = sin(radian) * canvasWidth / 2.5
+            val labelDistXFromCenter = cos(radian) * canvasHalfWidth * 0.75
+            val labelDistYFromCenter = sin(radian) * canvasHalfHeight * 0.75
 
             val proportionX = canvasHalfWidth + labelDistXFromCenter
             val proportionY = canvasHalfWidth + labelDistYFromCenter - (fontSize.toPx() / 2)
