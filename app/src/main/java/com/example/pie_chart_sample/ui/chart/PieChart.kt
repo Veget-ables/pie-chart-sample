@@ -3,7 +3,6 @@ package com.example.pie_chart_sample.ui.chart
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -18,7 +17,7 @@ import kotlin.math.sin
 data class Piece(
     val proportion: Float,
     val backgroundColor: Color,
-    val label: String,
+    val title: String,
     val labelColor: Color = Color.White
 )
 
@@ -28,24 +27,23 @@ fun PieChart(
     pieces: List<Piece>,
     labelFontSize: Dp,
 ) {
-
-    val endAngles = pieces.map { piece ->
+    val sweepAngles = pieces.map { piece ->
         360 * piece.proportion / 100
     }
 
     Canvas(
         modifier = modifier
     ) {
-        drawPie(pieces = pieces, endAngles = endAngles)
-        drawLabel(pieces = pieces, endAngles = endAngles, fontSize = labelFontSize)
+        drawPie(pieces = pieces, sweepAngles = sweepAngles)
+        drawLabel(pieces = pieces, sweepAngles = sweepAngles, fontSize = labelFontSize)
     }
 }
 
-private fun DrawScope.drawPie(pieces: List<Piece>, endAngles: List<Float>) {
+private fun DrawScope.drawPie(pieces: List<Piece>, sweepAngles: List<Float>) {
     var startAngle = 270f
 
     pieces.forEachIndexed { index, piece ->
-        val sweepAngle = endAngles[index]
+        val sweepAngle = sweepAngles[index]
 
         drawArc(
             color = piece.backgroundColor,
@@ -55,37 +53,16 @@ private fun DrawScope.drawPie(pieces: List<Piece>, endAngles: List<Float>) {
             size = size,
             style = Fill,
         )
-        startAngle += endAngles[index]
+        startAngle += sweepAngles[index]
     }
 }
 
-private fun DrawScope.drawLabel(pieces: List<Piece>, endAngles: List<Float>, fontSize: Dp) {
+private fun DrawScope.drawLabel(pieces: List<Piece>, sweepAngles: List<Float>, fontSize: Dp) {
     var startAngle = 270f
-    val canvasSize = size.width
+    val canvasWidth = size.width
+    val canvasHalfWidth = canvasWidth / 2
 
     pieces.forEachIndexed { index, piece ->
-        val sweepAngle = endAngles[index]
-
-        val centerAngle = startAngle + (sweepAngle / 2)
-        val radian = (centerAngle * Math.PI) / 180
-
-        val canvasHalfSize = canvasSize / 2
-        val additionalDistanceX = cos(radian) * canvasSize / 2.5
-        val additionalDistanceY = sin(radian) * canvasSize / 2.5
-
-        val proportionX = canvasHalfSize + additionalDistanceX
-        val proportionY = canvasHalfSize + additionalDistanceY - (fontSize.toPx() / 2)
-
-        val labelX = canvasHalfSize + additionalDistanceX
-        val labelY = canvasHalfSize + additionalDistanceY + (fontSize.toPx() / 2)
-
-        drawCircle(
-            color = Color.Black,
-            radius = 10f,
-            center = Offset(proportionX.toFloat(), proportionY.toFloat())
-        )
-        drawCircle(color = Color.Black, radius = 10f, center = Offset(proportionX.toFloat(), proportionY.toFloat()))
-
         val paint = Paint().asFrameworkPaint().apply {
             color = piece.labelColor.toArgb()
             textSize = fontSize.toPx()
@@ -93,20 +70,35 @@ private fun DrawScope.drawLabel(pieces: List<Piece>, endAngles: List<Float>, fon
         }
 
         drawIntoCanvas {
+            val sweepAngle = sweepAngles[index]
+
+            val centerAngle = startAngle + (sweepAngle / 2)
+            val radian = (centerAngle * Math.PI) / 180
+
+            val labelDistXFromCenter = cos(radian) * canvasWidth / 2.5
+            val labelDistYFromCenter = sin(radian) * canvasWidth / 2.5
+
+            val proportionX = canvasHalfWidth + labelDistXFromCenter
+            val proportionY = canvasHalfWidth + labelDistYFromCenter - (fontSize.toPx() / 2)
+
             it.nativeCanvas.drawText(
                 "${piece.proportion}%",
                 proportionX.toFloat(),
                 proportionY.toFloat(),
                 paint
             )
+
+            val titleX = canvasHalfWidth + labelDistXFromCenter
+            val titleY = canvasHalfWidth + labelDistYFromCenter + (fontSize.toPx() / 2)
+
             it.nativeCanvas.drawText(
-                piece.label,
-                labelX.toFloat(),
-                labelY.toFloat(),
+                piece.title,
+                titleX.toFloat(),
+                titleY.toFloat(),
                 paint
             )
         }
 
-        startAngle += endAngles[index]
+        startAngle += sweepAngles[index]
     }
 }
