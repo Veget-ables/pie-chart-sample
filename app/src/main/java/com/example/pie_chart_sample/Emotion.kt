@@ -2,28 +2,16 @@ package com.example.pie_chart_sample
 
 import androidx.compose.ui.graphics.Color
 
-internal enum class Emotion {
-    Joy,
-    Trust,
-    Fear,
-    Surprise,
-    Sadness,
-    Disgust,
-    Anger,
-    Anticipation,
+internal enum class Emotion(val label: String, val color: Color, val proportion: Float) {
+    Joy(label = "joy", color = Yellow500, proportion = 20f),
+    Trust(label = "trust", color = LightGreen500, proportion = 16f),
+    Fear(label = "fear", color = Green500, proportion = 12f),
+    Surprise(label = "surprise", color = Blue500, proportion = 15f),
+    Sadness(label = "sadness", color = Indigo500, proportion = 20f),
+    Disgust(label = "disgust", color = Purple500, proportion = 8f),
+    Anger(label = "anger", color = Red500, proportion = 5f),
+    Anticipation(label = "anticipation", color = Orange500, proportion = 4f),
 }
-
-internal val Emotion.color: Color
-    get() = when(this){
-        Emotion.Joy -> Yellow500
-        Emotion.Trust -> LightGreen500
-        Emotion.Fear -> Green500
-        Emotion.Surprise -> Blue500
-        Emotion.Sadness -> Indigo500
-        Emotion.Disgust -> Purple500
-        Emotion.Anger -> Red500
-        Emotion.Anticipation -> Orange500
-    }
 
 private val Red500 = Color(0xFFF44336)
 private val Purple500 = Color(0xFF9C27B0)
