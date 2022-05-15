@@ -69,17 +69,22 @@ private fun DrawScope.drawLabel(pieces: List<Piece>, endAngles: List<Float>, fon
         val centerAngle = startAngle + (sweepAngle / 2)
         val radian = (centerAngle * Math.PI) / 180
 
-        val proportionX = ((canvasSize / 2) + (cos(radian) * canvasSize / 4)).toFloat()
-        val proportionY = ((canvasSize / 2) + (sin(radian) * canvasSize / 4)).toFloat()
-        val labelX = ((canvasSize / 2) + (cos(radian) * canvasSize / 2.5)).toFloat()
-        val labelY = ((canvasSize / 2) + (sin(radian) * canvasSize / 2.5)).toFloat()
+        val canvasHalfSize = canvasSize / 2
+        val additionalDistanceX = cos(radian) * canvasSize / 2.5
+        val additionalDistanceY = sin(radian) * canvasSize / 2.5
+
+        val proportionX = canvasHalfSize + additionalDistanceX
+        val proportionY = canvasHalfSize + additionalDistanceY - (fontSize.toPx() / 2)
+
+        val labelX = canvasHalfSize + additionalDistanceX
+        val labelY = canvasHalfSize + additionalDistanceY + (fontSize.toPx() / 2)
 
         drawCircle(
             color = Color.Black,
             radius = 10f,
-            center = Offset(proportionX, proportionY)
+            center = Offset(proportionX.toFloat(), proportionY.toFloat())
         )
-        drawCircle(color = Color.Black, radius = 10f, center = Offset(labelX, labelY))
+        drawCircle(color = Color.Black, radius = 10f, center = Offset(proportionX.toFloat(), proportionY.toFloat()))
 
         val paint = Paint().asFrameworkPaint().apply {
             color = piece.labelColor.toArgb()
@@ -90,14 +95,14 @@ private fun DrawScope.drawLabel(pieces: List<Piece>, endAngles: List<Float>, fon
         drawIntoCanvas {
             it.nativeCanvas.drawText(
                 "${piece.proportion}%",
-                proportionX,
-                proportionY + (fontSize.toPx() / 4),
+                proportionX.toFloat(),
+                proportionY.toFloat(),
                 paint
             )
             it.nativeCanvas.drawText(
                 piece.label,
-                labelX,
-                labelY + (fontSize.toPx() / 4),
+                labelX.toFloat(),
+                labelY.toFloat(),
                 paint
             )
         }
