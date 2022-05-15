@@ -1,6 +1,7 @@
 package com.example.pie_chart_sample
 
 import androidx.compose.ui.graphics.Color
+import com.example.pie_chart_sample.ui.chart.Piece
 
 internal enum class Emotion(val title: String, val color: Color, val proportion: Float) {
     Joy(title = "喜び", color = Yellow500, proportion = 20f),
@@ -11,6 +12,14 @@ internal enum class Emotion(val title: String, val color: Color, val proportion:
     Disgust(title = "嫌悪", color = Purple500, proportion = 8f),
     Anger(title = "怒り", color = Red500, proportion = 5f),
     Anticipation(title = "期待", color = Orange500, proportion = 4f),
+}
+
+internal val emotionChartPieces = Emotion.values().map {
+    Piece(
+        proportion = it.proportion,
+        backgroundColor = it.color,
+        title = it.title
+    )
 }
 
 private val Red500 = Color(0xFFF44336)

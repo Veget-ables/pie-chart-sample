@@ -12,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.pie_chart_sample.ui.chart.PieChart
-import com.example.pie_chart_sample.ui.chart.Piece
 import com.example.pie_chart_sample.ui.theme.PiechartsampleTheme
 
 class MainActivity : ComponentActivity() {
@@ -37,12 +36,4 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
-
-val emotionChartPieces = Emotion.values().map {
-    Piece(
-        proportion = it.proportion,
-        backgroundColor = it.color,
-        title = it.title
-    )
 }

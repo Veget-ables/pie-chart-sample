@@ -14,7 +14,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun PieChart(
+internal fun PieChart(
     modifier: Modifier,
     pieces: List<Piece>,
     labelFontSize: Dp,
