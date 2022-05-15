@@ -35,7 +35,7 @@ fun PieChart(
         modifier = modifier
     ) {
         drawPie(pieces = pieces, sweepAngles = sweepAngles)
-        drawLabel(pieces = pieces, sweepAngles = sweepAngles, fontSize = labelFontSize)
+        drawLabels(pieces = pieces, sweepAngles = sweepAngles, fontSize = labelFontSize)
     }
 }
 
@@ -57,7 +57,7 @@ private fun DrawScope.drawPie(pieces: List<Piece>, sweepAngles: List<Float>) {
     }
 }
 
-private fun DrawScope.drawLabel(pieces: List<Piece>, sweepAngles: List<Float>, fontSize: Dp) {
+private fun DrawScope.drawLabels(pieces: List<Piece>, sweepAngles: List<Float>, fontSize: Dp) {
     var startAngle = 270f
     val canvasHalfWidth = size.width / 2
     val canvasHalfHeight = size.height / 2
