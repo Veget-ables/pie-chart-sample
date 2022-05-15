@@ -46,7 +46,7 @@ val emotionChartPieces = Emotion.values().map {
     Piece(
         proportion = it.proportion,
         backgroundColor = it.color,
-        title = it.label
+        title = it.title
     )
 }
 
