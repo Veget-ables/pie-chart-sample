@@ -65,7 +65,7 @@ private fun DrawScope.drawPie(pieces: List<Piece>, sweepAngles: List<Float>) {
             style = Fill,
         )
         // startAngleに描画した扇形の中心角を加算して次の扇形の描画開始位置を指定する
-        startAngle += sweepAngles[index]
+        startAngle += sweepAngle
     }
 }
 
@@ -116,8 +116,8 @@ private fun DrawScope.drawLabels(
                 titleY.toFloat(),
                 paint
             )
-        }
 
-        startAngle += sweepAngles[index]
+            startAngle += sweepAngle
+        }
     }
 }
