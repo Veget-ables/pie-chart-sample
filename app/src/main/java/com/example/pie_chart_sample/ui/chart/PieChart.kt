@@ -22,9 +22,11 @@ internal fun PieChart(
 ) {
     val totalSize = pieces.map { it.size }.sum()
 
+    // 各扇形のSizeが全体の何割に当たるのかを算出
     val proportions = pieces.map { piece ->
         piece.size * 100 / totalSize
     }
+    // 割合から各扇形の中心角を算出
     val sweepAngles = proportions.map { proportion ->
         360 * proportion / 100
     }
@@ -32,10 +34,12 @@ internal fun PieChart(
     Canvas(
         modifier = modifier
     ) {
+        // 全ての扇形を描画してPieを作る
         drawPie(
             pieces = pieces,
             sweepAngles = sweepAngles
         )
+        // 各扇形の上にラベルを描画する
         drawLabels(
             pieces = pieces,
             sweepAngles = sweepAngles,
@@ -46,11 +50,12 @@ internal fun PieChart(
 }
 
 private fun DrawScope.drawPie(pieces: List<Piece>, sweepAngles: List<Float>) {
+    // 円の真上から扇形を描画し始めるので開始地点の角度は270°
     var startAngle = 270f
 
     pieces.forEachIndexed { index, piece ->
         val sweepAngle = sweepAngles[index]
-
+        // 扇形を描画する。startAngleの位置からsweepAngleの中心角まで伸びた扇形を描画する
         drawArc(
             color = piece.backgroundColor,
             startAngle = startAngle,
@@ -59,6 +64,7 @@ private fun DrawScope.drawPie(pieces: List<Piece>, sweepAngles: List<Float>) {
             size = size,
             style = Fill,
         )
+        // startAngleに描画した扇形の中心角を加算して次の扇形の描画開始位置を指定する
         startAngle += sweepAngles[index]
     }
 }
@@ -80,6 +86,8 @@ private fun DrawScope.drawLabels(
             textAlign = android.graphics.Paint.Align.CENTER
         }
 
+        // 扇形の中央から少し外側にずらした位置にラベル（割合の数字とタイトル）を描画する。
+        // ラベルの基準の位置になるx,y座標は三角関数で算出。基準の位置を中心に割合の数字とタイトルが2行で並ぶように位置を調整
         drawIntoCanvas {
             val sweepAngle = sweepAngles[index]
 
