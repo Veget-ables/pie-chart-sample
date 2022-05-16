@@ -98,7 +98,7 @@ private fun DrawScope.drawLabels(
             val labelDistYFromCenter = sin(radian) * canvasHalfHeight * 0.75
 
             val proportionX = canvasHalfWidth + labelDistXFromCenter
-            val proportionY = canvasHalfWidth + labelDistYFromCenter - (fontSize.toPx() / 2)
+            val proportionY = canvasHalfHeight + labelDistYFromCenter - (fontSize.toPx() / 2)
 
             it.nativeCanvas.drawText(
                 "${proportions[index].roundToInt()}%",
@@ -108,7 +108,7 @@ private fun DrawScope.drawLabels(
             )
 
             val titleX = canvasHalfWidth + labelDistXFromCenter
-            val titleY = canvasHalfWidth + labelDistYFromCenter + (fontSize.toPx() / 2)
+            val titleY = canvasHalfHeight + labelDistYFromCenter + (fontSize.toPx() / 2)
 
             it.nativeCanvas.drawText(
                 piece.title,
