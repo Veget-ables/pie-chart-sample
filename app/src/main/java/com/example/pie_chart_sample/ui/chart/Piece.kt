@@ -6,5 +6,5 @@ data class Piece(
     val size: Float,
     val backgroundColor: Color,
     val title: String,
-    val labelColor: Color = Color.White
+    val labelColor: Color = Color.Black
 )
