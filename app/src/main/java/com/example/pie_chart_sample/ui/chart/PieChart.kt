@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.Dp
 import kotlin.math.cos
+import kotlin.math.roundToInt
 import kotlin.math.sin
 
 @Composable
@@ -19,15 +20,28 @@ internal fun PieChart(
     pieces: List<Piece>,
     labelFontSize: Dp,
 ) {
-    val sweepAngles = pieces.map { piece ->
-        360 * piece.proportion / 100
+    val totalSize = pieces.map { it.size }.sum()
+
+    val proportions = pieces.map { piece ->
+        piece.size * 100 / totalSize
+    }
+    val sweepAngles = proportions.map { proportion ->
+        360 * proportion / 100
     }
 
     Canvas(
         modifier = modifier
     ) {
-        drawPie(pieces = pieces, sweepAngles = sweepAngles)
-        drawLabels(pieces = pieces, sweepAngles = sweepAngles, fontSize = labelFontSize)
+        drawPie(
+            pieces = pieces,
+            sweepAngles = sweepAngles
+        )
+        drawLabels(
+            pieces = pieces,
+            sweepAngles = sweepAngles,
+            proportions = proportions,
+            fontSize = labelFontSize
+        )
     }
 }
 
@@ -49,7 +63,12 @@ private fun DrawScope.drawPie(pieces: List<Piece>, sweepAngles: List<Float>) {
     }
 }
 
-private fun DrawScope.drawLabels(pieces: List<Piece>, sweepAngles: List<Float>, fontSize: Dp) {
+private fun DrawScope.drawLabels(
+    pieces: List<Piece>,
+    sweepAngles: List<Float>,
+    proportions: List<Float>,
+    fontSize: Dp
+) {
     var startAngle = 270f
     val canvasHalfWidth = size.width / 2
     val canvasHalfHeight = size.height / 2
@@ -74,7 +93,7 @@ private fun DrawScope.drawLabels(pieces: List<Piece>, sweepAngles: List<Float>, 
             val proportionY = canvasHalfWidth + labelDistYFromCenter - (fontSize.toPx() / 2)
 
             it.nativeCanvas.drawText(
-                "${piece.proportion}%",
+                "${proportions[index].roundToInt()}%",
                 proportionX.toFloat(),
                 proportionY.toFloat(),
                 paint
